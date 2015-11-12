@@ -1,0 +1,21 @@
+{
+  "name": "recipes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "build": "browserify public/js/app.js -o public/js/dev.js -t [ babelify --presets [ react ] ]"
+  },
+  "author": "gwely",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2"
+  },
+  "devDependencies": {
+    "babel-preset-react": "^6.1.4",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "express": "^4.13.3"
+  }
+}
