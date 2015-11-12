@@ -1,10 +1,11 @@
 var React = require("react");
 
-var Recipe = React.createClass({
+var RecipeIngredient = require("./recipe-ingredient");
 
+var Recipe = React.createClass({
   createIngredientElement: function (ingredient) {
     return (
-      <span key={ingredient.id} className="ingredient-selected">{ingredient.name}</span>
+      <RecipeIngredient ingredient={ingredient} key={ingredient.id} removeIngredient={this.props.removeIngredient} />
     );
   },
 

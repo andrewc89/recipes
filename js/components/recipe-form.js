@@ -1,6 +1,7 @@
 var React = require("react");
 
 var Recipe = require("./recipe");
+var RecipeNameInput = require("./recipe-name-input");
 
 var RecipeForm = React.createClass({
   buttonDisabled: function () {
@@ -13,8 +14,8 @@ var RecipeForm = React.createClass({
     return (
       <div id="recipe-form">
         <h1>New Recipe</h1>
-        <input type="text" name="recipe-name" id="recipe-name" placeholder="Recipe name" onChange={this.props.updateRecipeName} value={this.props.recipe.name}/>
-        <Recipe recipe={this.props.recipe}/>
+        <RecipeNameInput handleUpdate={this.props.updateRecipeName} recipeName={this.props.recipe.name} />
+        <Recipe recipe={this.props.recipe} removeIngredient={this.props.removeIngredient}/>
         <button id="submit-button" onClick={this.props.submitRecipe} disabled={disabled}>Create</button>
       </div>
     );

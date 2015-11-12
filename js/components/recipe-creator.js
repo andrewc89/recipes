@@ -23,9 +23,9 @@ var RecipeCreator = React.createClass({
       });
   },
 
-  updateRecipeName: function (el) {
+  updateRecipeName: function (name) {
     var recipe = this.state.recipe;
-    recipe.name = el.target.value;
+    recipe.name = name;
     this.setState({ recipe: recipe });
   },
 
@@ -46,6 +46,15 @@ var RecipeCreator = React.createClass({
     if (!this.recipeContainsIngredient(ingredientId)) {
       recipe.ingredients.push(this.getIngredient(ingredientId));
     }
+    this.setState({ recipe: recipe });
+  },
+
+  removeIngredient: function (ingredientId) {
+    var recipe = this.state.recipe;
+    var ingredients = recipe.ingredients.filter(function (ingredient) {
+      return ingredient.id != ingredientId;
+    })
+    recipe.ingredients = ingredients;
     this.setState({ recipe: recipe });
   },
 
@@ -75,7 +84,7 @@ var RecipeCreator = React.createClass({
   render: function() {
     return (
       <div>
-        <RecipeForm recipe={this.state.recipe} updateRecipeName={this.updateRecipeName} submitRecipe={this.submitRecipe} />
+        <RecipeForm recipe={this.state.recipe} updateRecipeName={this.updateRecipeName} submitRecipe={this.submitRecipe} removeIngredient={this.removeIngredient} />
         <IngredientSearch ingredients={this.state.ingredients} addIngredient={this.addIngredient} />
       </div>
     );

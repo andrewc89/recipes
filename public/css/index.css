@@ -16,6 +16,12 @@ body {
   vertical-align: top;
 }
 
+.ingredient-select, .ingredient-deselect {
+  cursor: pointer;
+  margin-right: 3px;
+  float: left;
+}
+
 #recipe-form {
   width: 300px;
   margin: 5px;

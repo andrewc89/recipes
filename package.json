@@ -7,7 +7,7 @@
     "build": "js/**/*.js"
   },
   "scripts": {
-    "build": "browserify js/app.js -o public/dev.js -t [ babelify --presets [ react ] ]",
+    "build": "browserify js/app.js -o public/js/dev.js -t [ babelify --presets [ react ] ]",
     "watch": "npm-watch"
   },
   "author": "gwely",
