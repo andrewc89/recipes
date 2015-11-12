@@ -11,7 +11,7 @@ var Recipe = React.createClass({
   render: function () {
     var ingredientElements = this.props.recipe.ingredients.map(this.createIngredientElement);
     return (
-      <div>
+      <div id="recipe">
         <h2>{this.props.recipe.name}</h2>
         {ingredientElements}
       </div>

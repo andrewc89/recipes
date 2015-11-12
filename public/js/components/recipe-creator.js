@@ -29,25 +29,65 @@ var RecipeCreator = React.createClass({
     this.setState({ recipe: recipe });
   },
 
+  getIngredient: function (id) {
+    return this.state.ingredients.find(function (ingredient) {
+      return ingredient.id === id;
+    });
+  },
+
+  recipeContainsIngredient: function (ingredientId) {
+    return this.state.recipe.ingredients.map(function (ingredient) {
+      return ingredient.id;
+    }).indexOf(ingredientId) > -1;
+  },
+
   addIngredient: function (id) {
     var recipe = this.state.recipe;
-    if (recipe.ingredients.map(function (ingredient) {
-        return ingredient.id;
-      }).indexOf(id) === -1) {
-      recipe.ingredients.push(this.state.ingredients.find(function (ingredient) {
-        return ingredient.id === id;
-      }));
+    if (!this.recipeContainsIngredient(id)) {
+      recipe.ingredients.push(this.getIngredient(id));
     }
     this.setState({ recipe: recipe });
   },
 
+  resetRecipe: function () {
+    var recipe = this.state.recipe;
+    recipe.name = "";
+    recipe.ingredients = [];
+    this.setState({
+      recipe: recipe,
+      recipeNameInput: ""
+    });
+  },
+
+  submitRecipe: function () {
+    var self = this;
+    request.post("/recipes")
+      .send(this.state.recipe)
+      .set("Accept", "application/json")
+      .end(function (err, res) {
+        if (err) {
+          throw new Error(error);
+        }
+        self.resetRecipe();
+      });
+  },
+
+  buttonDisabled: function () {
+    var recipe = this.state.recipe;
+    return !recipe.name || recipe.ingredients.length === 0;
+  },
+
   render: function() {
+    var disabled = this.buttonDisabled();
     return (
       <div>
+        <div id="recipe-form">
+          <h1>New Recipe</h1>
+          <input type="text" name="recipe-name" id="recipe-name" placeholder="Recipe name" onChange={this.updateName} value={this.state.recipe.name}/>
+          <Recipe recipe={this.state.recipe}/>
+          <button id="submit-button" onClick={this.submitRecipe} disabled={disabled}>Create</button>
+        </div>
         <IngredientSearch ingredients={this.state.ingredients} addIngredient={this.addIngredient} />
-        <label htmlFor="recipe-name">Recipe Name:</label>
-        <input type="text" name="recipe-name" id="recipe-name" onChange={this.updateName}></input>
-        <Recipe recipe={this.state.recipe}/>
       </div>
     );
   }

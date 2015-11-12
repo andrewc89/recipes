@@ -35,11 +35,11 @@ var IngredientSearch = React.createClass({
   },
 
   render: function () {
-    console.log("render");
     var filteredIngredients = this.getFilteredIngredients().map(this.createIngredientElement);
     return (
-      <div>
-        <input type="text" id="ingredient-search" onChange={this.searchUpdated}></input>
+      <div id="ingredient-search">
+        <h3>Ingredients:</h3>
+        <input type="text" id="ingredient-search-input" placeholder="Search for ingredients" onChange={this.searchUpdated}></input>
         <div id="search-results">
           {filteredIngredients}
         </div>

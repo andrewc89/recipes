@@ -5,7 +5,10 @@ var ingredients = [
   { id: "1", name: "Cascade" },
   { id: "2", name: "Simcoe" },
   { id: "3", name: "Crystal Malt" },
-  { id: "4", name: "Pale Malt" }
+  { id: "4", name: "Pale Malt" },
+  { id: "5", name: "Amarillo" },
+  { id: "6", name: "Peach Extract" },
+  { id: "7", name: "Grapefruit Extract" },
 ];
 
 module.exports = {
