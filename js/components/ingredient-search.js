@@ -1,5 +1,8 @@
 var React = require("react");
 
+var IngredientSearchInput = require("./ingredient-search-input");
+var IngredientSearchResult = require("./ingredient-search-result");
+
 var IngredientSearch = React.createClass({
   getInitialState: function () {
     return {
@@ -11,16 +14,9 @@ var IngredientSearch = React.createClass({
     this.setState({ query: el.target.value });
   },
 
-  handleClick: function (el) {
-    this.props.addIngredient(el.id);
-  },
-
   createIngredientElement: function (ingredient) {
     return (
-      <div key={ingredient.id} className="ingredient-search-result">
-        <span className="ingredient-name">{ingredient.name}</span>
-        <span className="ingredient-select" onClick={this.handleClick.bind(this, ingredient)}>+</span>
-      </div>
+      <IngredientSearchResult ingredient={ingredient} handleClick={this.props.addIngredient} key={ingredient.id} />
     );
   },
 
@@ -39,7 +35,7 @@ var IngredientSearch = React.createClass({
     return (
       <div id="ingredient-search">
         <h3>Ingredients:</h3>
-        <input type="text" id="ingredient-search-input" placeholder="Search for ingredients" onChange={this.searchUpdated}></input>
+        <IngredientSearchInput searchUpdated={this.searchUpdated} />
         <div id="search-results">
           {filteredIngredients}
         </div>

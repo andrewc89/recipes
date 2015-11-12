@@ -1,8 +1,8 @@
 var React = require("react");
 var request = require("superagent");
 
+var RecipeForm = require("./recipe-form");
 var IngredientSearch = require("./ingredient-search");
-var Recipe = require("./recipe");
 
 var RecipeCreator = React.createClass({
   getInitialState: function () {
@@ -23,7 +23,7 @@ var RecipeCreator = React.createClass({
       });
   },
 
-  updateName: function (el) {
+  updateRecipeName: function (el) {
     var recipe = this.state.recipe;
     recipe.name = el.target.value;
     this.setState({ recipe: recipe });
@@ -41,10 +41,10 @@ var RecipeCreator = React.createClass({
     }).indexOf(ingredientId) > -1;
   },
 
-  addIngredient: function (id) {
+  addIngredient: function (ingredientId) {
     var recipe = this.state.recipe;
-    if (!this.recipeContainsIngredient(id)) {
-      recipe.ingredients.push(this.getIngredient(id));
+    if (!this.recipeContainsIngredient(ingredientId)) {
+      recipe.ingredients.push(this.getIngredient(ingredientId));
     }
     this.setState({ recipe: recipe });
   },
@@ -72,21 +72,10 @@ var RecipeCreator = React.createClass({
       });
   },
 
-  buttonDisabled: function () {
-    var recipe = this.state.recipe;
-    return !recipe.name || recipe.ingredients.length === 0;
-  },
-
   render: function() {
-    var disabled = this.buttonDisabled();
     return (
       <div>
-        <div id="recipe-form">
-          <h1>New Recipe</h1>
-          <input type="text" name="recipe-name" id="recipe-name" placeholder="Recipe name" onChange={this.updateName} value={this.state.recipe.name}/>
-          <Recipe recipe={this.state.recipe}/>
-          <button id="submit-button" onClick={this.submitRecipe} disabled={disabled}>Create</button>
-        </div>
+        <RecipeForm recipe={this.state.recipe} updateRecipeName={this.updateRecipeName} submitRecipe={this.submitRecipe} />
         <IngredientSearch ingredients={this.state.ingredients} addIngredient={this.addIngredient} />
       </div>
     );

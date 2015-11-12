@@ -1,3 +1,7 @@
 # recipes
 
-Start server with `node app.js`
+```
+npm i
+node app.js
+```
+navigate to http://localhost:9000

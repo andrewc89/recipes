@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.js",
   "watch": {
-    "build": "public/js/**/*.js"
+    "build": "js/**/*.js"
   },
   "scripts": {
-    "build": "browserify public/js/app.js -o public/dev.js -t [ babelify --presets [ react ] ]",
+    "build": "browserify js/app.js -o public/dev.js -t [ babelify --presets [ react ] ]",
     "watch": "npm-watch"
   },
   "author": "gwely",
