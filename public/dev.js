@@ -20366,57 +20366,70 @@ module.exports = request;
 },{"emitter":1,"reduce":160}],162:[function(require,module,exports){
 var React = require("react");
 var ReactDOM = require("react-dom");
-var Recipes = require("./components/recipes");
+var RecipeCreator = require("./components/recipe-creator");
 
-ReactDOM.render(React.createElement(Recipes, {
+ReactDOM.render(React.createElement(RecipeCreator, {
   __source: {
     fileName: "..\\..\\..\\public\\js\\app.js",
     lineNumber: 5
   }
 }), document.getElementById("content"));
 
-},{"./components/recipes":163,"react":159,"react-dom":30}],163:[function(require,module,exports){
+},{"./components/recipe-creator":164,"react":159,"react-dom":30}],163:[function(require,module,exports){
 var React = require("react");
-var request = require("superagent");
 
-var Recipes = React.createClass({
-  displayName: "Recipes",
+var IngredientSearch = React.createClass({
+  displayName: "IngredientSearch",
 
   getInitialState: function () {
     return {
-      ingredients: [],
       query: ""
     };
-  },
-  componentDidMount: function () {
-    var self = this;
-    request.get("/ingredients").end(function (err, res) {
-      self.setState({ ingredients: res.body });
-    });
   },
 
   searchUpdated: function (el) {
     this.setState({ query: el.target.value });
   },
 
+  handleClick: function (el) {
+    this.props.addIngredient(el.id);
+  },
+
   createIngredientElement: function (ingredient) {
     return React.createElement(
-      "span",
-      { key: ingredient.id, className: "ingredient", __source: {
-          fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
-          lineNumber: 25
+      "div",
+      { key: ingredient.id, className: "ingredient-search-result", __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\ingredient-search.js",
+          lineNumber: 20
         }
       },
-      ingredient.name
+      React.createElement(
+        "span",
+        { className: "ingredient-name", __source: {
+            fileName: "..\\..\\..\\public\\js\\components\\ingredient-search.js",
+            lineNumber: 21
+          }
+        },
+        ingredient.name
+      ),
+      React.createElement(
+        "span",
+        { className: "ingredient-select", onClick: this.handleClick.bind(this, ingredient), __source: {
+            fileName: "..\\..\\..\\public\\js\\components\\ingredient-search.js",
+            lineNumber: 22
+          }
+        },
+        "+"
+      )
     );
   },
 
   getFilteredIngredients: function () {
     var query = this.state.query.toLowerCase();
     if (!query) {
-      return this.state.ingredients;
+      return this.props.ingredients;
     }
-    return this.state.ingredients.filter(function (ingredient) {
+    return this.props.ingredients.filter(function (ingredient) {
       return ingredient.name.toLowerCase().search(query) != -1;
     });
   },
@@ -20428,20 +20441,20 @@ var Recipes = React.createClass({
       "div",
       {
         __source: {
-          fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
-          lineNumber: 43
+          fileName: "..\\..\\..\\public\\js\\components\\ingredient-search.js",
+          lineNumber: 41
         }
       },
       React.createElement("input", { type: "text", id: "ingredient-search", onChange: this.searchUpdated, __source: {
-          fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
-          lineNumber: 44
+          fileName: "..\\..\\..\\public\\js\\components\\ingredient-search.js",
+          lineNumber: 42
         }
       }),
       React.createElement(
         "div",
         { id: "search-results", __source: {
-            fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
-            lineNumber: 45
+            fileName: "..\\..\\..\\public\\js\\components\\ingredient-search.js",
+            lineNumber: 43
           }
         },
         filteredIngredients
@@ -20450,6 +20463,135 @@ var Recipes = React.createClass({
   }
 });
 
-module.exports = Recipes;
+module.exports = IngredientSearch;
 
-},{"react":159,"superagent":161}]},{},[162]);
+},{"react":159}],164:[function(require,module,exports){
+var React = require("react");
+var request = require("superagent");
+
+var IngredientSearch = require("./ingredient-search");
+var Recipe = require("./recipe");
+
+var RecipeCreator = React.createClass({
+  displayName: "RecipeCreator",
+
+  getInitialState: function () {
+    return {
+      ingredients: [],
+      recipe: {
+        name: "",
+        ingredients: []
+      }
+    };
+  },
+
+  componentDidMount: function () {
+    var self = this;
+    request.get("/ingredients").end(function (err, res) {
+      self.setState({ ingredients: res.body });
+    });
+  },
+
+  updateName: function (el) {
+    var recipe = this.state.recipe;
+    recipe.name = el.target.value;
+    this.setState({ recipe: recipe });
+  },
+
+  addIngredient: function (id) {
+    var recipe = this.state.recipe;
+    if (recipe.ingredients.map(function (ingredient) {
+      return ingredient.id;
+    }).indexOf(id) === -1) {
+      recipe.ingredients.push(this.state.ingredients.find(function (ingredient) {
+        return ingredient.id === id;
+      }));
+    }
+    this.setState({ recipe: recipe });
+  },
+
+  render: function () {
+    return React.createElement(
+      "div",
+      {
+        __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipe-creator.js",
+          lineNumber: 46
+        }
+      },
+      React.createElement(IngredientSearch, { ingredients: this.state.ingredients, addIngredient: this.addIngredient, __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipe-creator.js",
+          lineNumber: 47
+        }
+      }),
+      React.createElement(
+        "label",
+        { htmlFor: "recipe-name", __source: {
+            fileName: "..\\..\\..\\public\\js\\components\\recipe-creator.js",
+            lineNumber: 48
+          }
+        },
+        "Recipe Name:"
+      ),
+      React.createElement("input", { type: "text", name: "recipe-name", id: "recipe-name", onChange: this.updateName, __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipe-creator.js",
+          lineNumber: 49
+        }
+      }),
+      React.createElement(Recipe, { recipe: this.state.recipe, __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipe-creator.js",
+          lineNumber: 50
+        }
+      })
+    );
+  }
+});
+
+module.exports = RecipeCreator;
+
+},{"./ingredient-search":163,"./recipe":165,"react":159,"superagent":161}],165:[function(require,module,exports){
+var React = require("react");
+
+var Recipe = React.createClass({
+  displayName: "Recipe",
+
+  createIngredientElement: function (ingredient) {
+    return React.createElement(
+      "span",
+      { key: ingredient.id, className: "ingredient-selected", __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipe.js",
+          lineNumber: 7
+        }
+      },
+      ingredient.name
+    );
+  },
+
+  render: function () {
+    var ingredientElements = this.props.recipe.ingredients.map(this.createIngredientElement);
+    return React.createElement(
+      "div",
+      {
+        __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipe.js",
+          lineNumber: 14
+        }
+      },
+      React.createElement(
+        "h2",
+        {
+          __source: {
+            fileName: "..\\..\\..\\public\\js\\components\\recipe.js",
+            lineNumber: 15
+          }
+        },
+        this.props.recipe.name
+      ),
+      ingredientElements
+    );
+  }
+});
+
+module.exports = Recipe;
+
+},{"react":159}]},{},[162]);

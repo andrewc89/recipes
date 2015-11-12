@@ -1,37 +1,35 @@
 var React = require("react");
-var request = require("superagent");
 
-var Recipes = React.createClass({
+var IngredientSearch = React.createClass({
   getInitialState: function () {
     return {
-      ingredients: [],
       query: ""
     };
-  },
-  componentDidMount: function () {
-    var self = this;
-    request.get("/ingredients")
-      .end(function (err, res) {
-        self.setState({ ingredients: res.body });
-      });
   },
 
   searchUpdated: function (el) {
     this.setState({ query: el.target.value });
   },
 
+  handleClick: function (el) {
+    this.props.addIngredient(el.id);
+  },
+
   createIngredientElement: function (ingredient) {
     return (
-      <span key={ingredient.id} className="ingredient">{ingredient.name}</span>
+      <div key={ingredient.id} className="ingredient-search-result">
+        <span className="ingredient-name">{ingredient.name}</span>
+        <span className="ingredient-select" onClick={this.handleClick.bind(this, ingredient)}>+</span>
+      </div>
     );
   },
 
   getFilteredIngredients: function () {
     var query = this.state.query.toLowerCase();
     if (!query) {
-      return this.state.ingredients;
+      return this.props.ingredients;
     }
-    return this.state.ingredients.filter(function (ingredient) {
+    return this.props.ingredients.filter(function (ingredient) {
       return ingredient.name.toLowerCase().search(query) != -1;
     });
   },
@@ -50,4 +48,4 @@ var Recipes = React.createClass({
   }
 });
 
-module.exports = Recipes;
+module.exports = IngredientSearch;
