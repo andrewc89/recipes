@@ -2,10 +2,10 @@ var express = require("express");
 var livereload = require("livereload");
 var ingredients = [
   { id: "0", name: "Nelson Sauvin" },
-  { id: "0", name: "Cascade" },
-  { id: "0", name: "Simcoe" },
-  { id: "0", name: "Crystal Malt" },
-  { id: "0", name: "Pale Malt" }
+  { id: "1", name: "Cascade" },
+  { id: "2", name: "Simcoe" },
+  { id: "3", name: "Crystal Malt" },
+  { id: "4", name: "Pale Malt" }
 ];
 
 module.exports = {

@@ -20384,7 +20384,8 @@ var Recipes = React.createClass({
 
   getInitialState: function () {
     return {
-      ingredients: []
+      ingredients: [],
+      query: ""
     };
   },
   componentDidMount: function () {
@@ -20394,14 +20395,58 @@ var Recipes = React.createClass({
     });
   },
 
+  searchUpdated: function (el) {
+    this.setState({ query: el.target.value });
+  },
+
+  createIngredientElement: function (ingredient) {
+    return React.createElement(
+      "span",
+      { key: ingredient.id, className: "ingredient", __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
+          lineNumber: 25
+        }
+      },
+      ingredient.name
+    );
+  },
+
+  getFilteredIngredients: function () {
+    var query = this.state.query.toLowerCase();
+    if (!query) {
+      return this.state.ingredients;
+    }
+    return this.state.ingredients.filter(function (ingredient) {
+      return ingredient.name.toLowerCase().search(query) != -1;
+    });
+  },
+
   render: function () {
     console.log("render");
-    return React.createElement("div", {
-      __source: {
-        fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
-        lineNumber: 21
-      }
-    });
+    var filteredIngredients = this.getFilteredIngredients().map(this.createIngredientElement);
+    return React.createElement(
+      "div",
+      {
+        __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
+          lineNumber: 43
+        }
+      },
+      React.createElement("input", { type: "text", id: "ingredient-search", onChange: this.searchUpdated, __source: {
+          fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
+          lineNumber: 44
+        }
+      }),
+      React.createElement(
+        "div",
+        { id: "search-results", __source: {
+            fileName: "..\\..\\..\\public\\js\\components\\recipes.js",
+            lineNumber: 45
+          }
+        },
+        filteredIngredients
+      )
+    );
   }
 });
 
